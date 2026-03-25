@@ -160,7 +160,12 @@ pip install -r requirements.txt
 python core/calculator.py
 Starter Assumptions
 
-This starter version uses sample inputs embedded in Python to demonstrate the model.
+## Starter Assumptions
+
+This starter version uses a sample CSV input file located at:
+
+```text
+data/sample_inputs.csv
 
 The next iteration can evolve to:
 
