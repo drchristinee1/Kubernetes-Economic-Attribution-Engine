@@ -8,6 +8,7 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_FILE = BASE_DIR / "data" / "sample_inputs.csv"
+OUTPUT_FILE = BASE_DIR / "outputs" / "sample_attribution_report.csv"
 
 
 def build_sample_usage() -> pd.DataFrame:
@@ -99,15 +100,23 @@ def build_reconciliation_summary(df: pd.DataFrame) -> dict:
     return summary
 
 
+def write_output(df: pd.DataFrame) -> None:
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(OUTPUT_FILE, index=False)
+
+
 def main() -> None:
     df = calculate_allocation()
     summary = build_reconciliation_summary(df)
+    write_output(df)
 
     print("\nKubernetes Economic Attribution Report\n")
     print(df.to_string(index=False))
 
     print("\nReconciliation Summary\n")
     print(json.dumps(summary, indent=2))
+
+    print(f"\nOutput written to: {OUTPUT_FILE}\n")
 
 
 if __name__ == "__main__":
