@@ -1,0 +1,93 @@
+groups:
+  - name: finops-cost-alerts
+    rules:
+
+      # ---------------------------------------------------------
+      # 1. Namespace Cost Spike Alert (25% increase)
+      # ---------------------------------------------------------
+      - alert: NamespaceCostSpike
+        expr: |
+          (
+            sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)
+            /
+            avg_over_time(sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)[1h:])
+          ) > 1.25
+        for: 10m
+        labels:
+          severity: warning
+          finops_signal: cost_spike
+        annotations:
+          summary: "Namespace cost spike detected"
+          description: "Namespace {{ $labels.namespace }} shows >25% increase in resource usage compared to baseline."
+
+      # ---------------------------------------------------------
+      # 2. High Idle Capacity Alert
+      # ---------------------------------------------------------
+      - alert: HighIdleCapacity
+        expr: |
+          (
+            sum(kube_node_status_allocatable_cpu_cores)
+            -
+            sum(rate(container_cpu_usage_seconds_total[5m]))
+          )
+          /
+          sum(kube_node_status_allocatable_cpu_cores)
+          > 0.30
+        for: 15m
+        labels:
+          severity: warning
+          finops_signal: idle_capacity
+        annotations:
+          summary: "High idle capacity detected"
+          description: "More than 30% of cluster CPU capacity is idle. Potential overprovisioning."
+
+      # ---------------------------------------------------------
+      # 3. Missing FinOps Ownership Labels
+      # ---------------------------------------------------------
+      - alert: MissingFinOpsLabels
+        expr: |
+          count by (namespace) (
+            kube_namespace_labels{label_finops_owner=""}
+          ) > 0
+        for: 5m
+        labels:
+          severity: critical
+          finops_signal: missing_owner
+        annotations:
+          summary: "Missing FinOps ownership label"
+          description: "Namespace {{ $labels.namespace }} does not have finops.owner label."
+
+      # ---------------------------------------------------------
+      # 4. Over-Provisioned Namespace (Requests >> Usage)
+      # ---------------------------------------------------------
+      - alert: OverProvisionedNamespace
+        expr: |
+          (
+            sum(kube_pod_container_resource_requests_cpu_cores) by (namespace)
+            /
+            sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)
+          ) > 2
+        for: 15m
+        labels:
+          severity: warning
+          finops_signal: overprovisioning
+        annotations:
+          summary: "Over-provisioned namespace detected"
+          description: "Namespace {{ $labels.namespace }} is requesting more than 2x its actual CPU usage."
+
+      # ---------------------------------------------------------
+      # 5. Sudden Shared Service Growth (Example: Logging)
+      # ---------------------------------------------------------
+      - alert: SharedServiceCostIncrease
+        expr: |
+          increase(container_cpu_usage_seconds_total{namespace="logging"}[1h]) 
+          >
+          1.5 *
+          avg_over_time(container_cpu_usage_seconds_total{namespace="logging"}[6h:])
+        for: 10m
+        labels:
+          severity: warning
+          finops_signal: platform_cost_change
+        annotations:
+          summary: "Shared service cost increase detected"
+          description: "Logging namespace CPU usage increased significantly. Possible platform-driven cost change."
