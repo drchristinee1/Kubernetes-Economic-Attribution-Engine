@@ -1,0 +1,6 @@
+namespace,requested_cpu,used_cpu,requested_memory_gb,used_memory_gb,owner,cost_center,environment
+payments,8,6,16,12,team-payments,fin-payments,prod
+checkout,6,4,12,8,team-commerce,fin-commerce,prod
+search,10,7,20,14,team-search,fin-search,prod
+marketing-dev,4,1.5,8,3,team-marketing,fin-marketing,dev
+platform-logging,5,4.5,10,8,team-platform,fin-platform,shared
