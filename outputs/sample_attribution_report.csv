@@ -1,0 +1,6 @@
+namespace,owner,cost_center,environment,requested_cpu,used_cpu,requested_memory_gb,used_memory_gb,direct_cost,shared_cost,idle_cost,total_cost
+payments,team-payments,fin-payments,prod,8,6,16,12,1164.00,225.00,120.00,1509.00
+checkout,team-commerce,fin-commerce,prod,6,4,12,8,873.00,168.75,90.00,1131.75
+search,team-search,fin-search,prod,10,7,20,14,1455.00,281.25,150.00,1886.25
+marketing-dev,team-marketing,fin-marketing,dev,4,1.5,8,3,582.00,112.50,60.00,754.50
+platform-logging,team-platform,fin-platform,shared,5,4.5,10,8,727.50,112.50,60.00,900.00
