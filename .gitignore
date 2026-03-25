@@ -33,7 +33,6 @@ htmlcov/
 *.log
 
 # Output files
-outputs/*.csv
 outputs/*.json
 
 # Environment files
