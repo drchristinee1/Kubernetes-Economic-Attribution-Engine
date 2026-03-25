@@ -1,0 +1,23 @@
+opencost:
+  exporter:
+    defaultClusterId: demo-cluster
+
+    extraEnv:
+      EMIT_POD_ANNOTATIONS: "true"
+      EMIT_NAMESPACE_ANNOTATIONS: "true"
+
+  prometheus:
+    internal:
+      enabled: true
+
+  ui:
+    enabled: true
+
+  metrics:
+    serviceMonitor:
+      enabled: false
+
+prometheus:
+  server:
+    global:
+      scrape_interval: 1m
