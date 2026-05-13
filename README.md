@@ -1,6 +1,6 @@
 # Kubernetes Economic Attribution Engine
 
-**Solving the unallocated Kubernetes spend problem through transparent, namespace-level cost attribution.**
+**Telemetry-backed Kubernetes economic attribution for shared-cost allocation, idle capacity reconciliation, and engineering accountability**
 
 Cloud providers bill Kubernetes infrastructure at the **node** level, but business value is created at the **namespace**, **service**, and **product** level.
 
